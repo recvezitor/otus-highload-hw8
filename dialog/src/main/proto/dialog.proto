@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+option java_multiple_files = true;
+option java_package = "com.dimas.dialog.sdk.grpc";
+
+
+service ApiDialogService {
+  rpc get (ApiDialogMessageRequest) returns (ApiDialogMessageResponse);
+  rpc save (ApiDialogNewMessageRequest) returns (ApiDialogNewMessageResponse);
+}
+
+message ApiDialogNewMessageRequest {
+  string from = 1;
+  string to = 2;
+  string text = 3;
+}
+
+message ApiDialogNewMessageResponse {
+  string id = 1;
+}
+
+message ApiDialogMessage {
+  string from = 1;
+  string to = 2;
+  string text = 3;
+  google.protobuf.Timestamp publishedAt = 4;
+}
+
+message ApiDialogMessageRequest{
+  string from = 1;
+  string to = 2;
+}
+
+message ApiDialogMessageResponse{
+  repeated ApiDialogMessage dialog = 1;
+}

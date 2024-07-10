@@ -1,0 +1,46 @@
+quarkus:
+  application:
+    name: hw8-dialog
+  http:
+    port: ${PORT:8081}
+    root-path: /dialog-service
+  log:
+    level: ${LOG_LEVEL:INFO}
+    category:
+      "com.dimas":
+        level: ${OTUS_LOG_LEVEL:DEBUG}
+    console:
+      format: "%d{HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n"
+#  quarkus.http.access-log.pattern="...traceId=%{X,traceId} spanId=%{X,spanId}"
+  console:
+    color: true
+  datasource:
+    jdbc: false
+    db-kind: postgresql
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    reactive:
+      url: ${DB_URL:postgresql://localhost:5432/postgres}
+      max-size: ${DB_POOL_SIZE:80}
+      idle-timeout: ${DB_POOL_IDLE_TIME:PT30s}
+      max-lifetime: ${DB_POOL_MAX_TIME:PT60s}
+  redis:
+    hosts: ${REDIS_HOST:redis://localhost:6379}
+    pool-cleaner-interval: 20
+    pool-recycle-timeout: 20
+  cache:
+    redis:
+      feed-cache:
+        key-type: java.lang.String
+        value-type: java.util.List
+      expire-after-write: 600s
+  otel:
+    exporter:
+      otlp:
+        traces:
+          endpoint: http://localhost:4317/
+
+
+rest-logging:
+  enabled: true
+  append-body: true

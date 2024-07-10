@@ -1,0 +1,75 @@
+quarkus:
+  application:
+    name: hw8-core
+    version: 1.0
+  http:
+    port: ${PORT:8080}
+    root-path: /
+  log:
+    level: ${LOG_LEVEL:INFO}
+    category:
+      "org.jboss.resteasy.reactive.client.logging":
+        level: DEBUG
+      "com.dimas":
+        level: ${OTUS_LOG_LEVEL:DEBUG}
+    #    console:
+    #      format: "%d{yyyy-MM-dd HH:mm:ss} %-5p [%c{3.}] (%t) %s%e%n"
+    console:
+      format: "%d{HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n"
+  console:
+    color: true
+  openapi-generator:
+    codegen:
+      input-base-dir: src/main/resources/openapi
+      spec:
+        openapi_json:
+          base-package: com.dimas.openapi
+          model-name-prefix: Api
+  datasource:
+    jdbc: false
+    db-kind: postgresql
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    reactive:
+      url: ${DB_URL:postgresql://localhost:5432/postgres}
+      max-size: ${DB_POOL_SIZE:80}
+      idle-timeout: ${DB_POOL_IDLE_TIME:PT30s}
+      max-lifetime: ${DB_POOL_MAX_TIME:PT60s}
+  redis:
+    hosts: ${REDIS_HOST:redis://localhost:6379}
+    pool-cleaner-interval: 20
+    pool-recycle-timeout: 20
+  cache:
+    redis:
+      feed-cache:
+        key-type: java.lang.String
+        value-type: java.util.List
+      expire-after-write: 600s
+  rabbitmq:
+    devservices:
+      enabled: false
+  rest-client:
+    logging:
+      scope: request-response
+      body-limit: 500
+    dialog-api:
+      url: ${DIALOG_API_URL:http://localhost:8081/dialog-service/dialog}
+  opentelemetry:
+    traces:
+      enabled: true
+    exporter:
+      otlp:
+        traces:
+          endpoint: http://localhost:4317/
+
+rabbitmq:
+  virtual-host: ${RABBIT_VHOST:/}
+  username: ${RABBIT_USERNAME:admin}
+  password: ${RABBIT_PASSWORD:admin}
+  hostname: ${RABBIT_HOSTNAME:localhost}
+  port: ${RABBIT_PORT:5672}
+
+
+rest-logging:
+  enabled: true
+  append-body: true

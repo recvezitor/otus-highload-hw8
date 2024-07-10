@@ -1,0 +1,56 @@
+###
+GET {{protocol}}{{host-dialog}}/dialog-service/q/health
+
+###
+GET {{protocol}}{{host-dialog}}/dialog-service/q/info
+
+
+### get dialog directly
+GET {{protocol}}{{host-dialog}}/dialog-service/dialog/10775498-ae09-4e13-a2ff-f7c1e190043f/370c779a-3570-49e4-b066-34f1c06f494d
+Content-Type: application/json
+
+
+### login first
+POST {{protocol}}{{host}}/login
+Content-Type: application/json
+
+{
+  "id": "10775498-ae09-4e13-a2ff-f7c1e190043f",
+  "password": "123"
+}
+
+> {%
+    client.global.set("auth_token", response.body.token);
+%}
+
+### get dialog via client
+GET {{protocol}}{{host}}/dialog/370c779a-3570-49e4-b066-34f1c06f494d/list
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+### abbdd14d-9dfb-434d-8696-fbffa0d52d5d Леопольд - подписан только на Леди Гагу
+### 370c779a-3570-49e4-b066-34f1c06f494d Леонардо - на Гагу и еще на 2х
+### 10775498-ae09-4e13-a2ff-f7c1e190043f Леди Гага - со всеми
+### save message
+POST {{protocol}}{{host}}/dialog-service/dialog/10775498-ae09-4e13-a2ff-f7c1e190043f/370c779a-3570-49e4-b066-34f1c06f494d
+Content-Type: application/json
+
+{
+  "text": "1->"
+}
+
+### save message
+POST {{protocol}}{{host}}/dialog-service/dialog/370c779a-3570-49e4-b066-34f1c06f494d/10775498-ae09-4e13-a2ff-f7c1e190043f
+Content-Type: application/json
+
+{
+  "text": "<-2"
+}
+
+### save fast message
+POST {{protocol}}{{host}}/dialog-service/dialog/fast/10775498-ae09-4e13-a2ff-f7c1e190043f/370c779a-3570-49e4-b066-34f1c06f494d
+Content-Type: application/json
+
+{
+  "text": "r2->"
+}
